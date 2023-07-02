@@ -1,5 +1,7 @@
 package application;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import boardgame.InputMismachException;
@@ -13,11 +15,12 @@ public class Program {
 		
 		Scanner sc = new Scanner(System.in);
 		ChessMatch ChessMatch = new ChessMatch();
+		List<ChessPiece> captured = new ArrayList<>();
 		
 		while (true) {
 			try {
 				UI.clearScreen();
-				UI.printMatch(ChessMatch);
+				UI.printMatch(ChessMatch, captured);
 				System.out.println();
 				System.out.print("source: ");
 				ChessPosition source = UI.readChessPosition(sc);
@@ -29,7 +32,11 @@ public class Program {
 				System.out.print("Target: ");
 				ChessPosition target = UI.readChessPosition(sc);
 				
-				ChessPiece CapturedPiece = ChessMatch.performChessMove(source, target);
+				ChessPiece capturedPiece = ChessMatch.performChessMove(source, target);
+			
+				if (capturedPiece != null) {
+					captured.add(capturedPiece);
+				}
 			}
 			catch (ChessException e) {
 				System.out.println(e.getMessage());

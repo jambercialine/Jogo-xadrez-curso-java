@@ -1,6 +1,9 @@
 package application;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 import boardgame.InputMismachException;
 import chess.ChessMatch;
@@ -47,11 +50,12 @@ public class UI {
 			throw new InputMismachException("Erro lendo posição de xadrez. Valores válidos: a1 até h8.");
 
 		}
-
 	}
 
-	public static void printMatch(ChessMatch ChessMatch) {
+	public static void printMatch(ChessMatch ChessMatch, List<ChessPiece> captured) {
 		printBoard(ChessMatch.getPieces());
+		System.out.println();
+		printCapturedPieces(captured);
 		System.out.println();
 		System.out.println("Turno: " + ChessMatch.getTurn());
 		System.out.println("Esperando o jogador: " + ChessMatch.getCurrentPlayer());
@@ -78,8 +82,7 @@ public class UI {
 		}
 		System.out.println("  a b c d e f g h");
 	}
-	
-	
+		
 	private static void printPiece(ChessPiece piece, boolean background) {
 		if (background) {
 			System.out.print(ANSI_BLUE_BACKGROUND);
@@ -96,4 +99,18 @@ public class UI {
 		System.out.print(" ");
 	}
 
+	private static void printCapturedPieces(List<ChessPiece> captured) {
+		List<ChessPiece> white = captured.stream().filter(x -> x.getColor()== Color.WHITE).collect(Collectors.toList());
+		List<ChessPiece> black = captured.stream().filter(x -> x.getColor()== Color.BLACK).collect(Collectors.toList());
+		System.out.println("Peças capturadas: ");
+		System.out.print("Brancas: ");
+		System.out.print(ANSI_WHITE);
+		System.out.println(Arrays.toString(white.toArray()));
+		System.out.println(ANSI_RESET);
+		System.out.print("Pretas: ");
+		System.out.print(ANSI_YELLOW);
+		System.out.println(Arrays.toString(black.toArray()));
+		System.out.println(ANSI_RESET);
+	}
+	
 }
